@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<liga>
+    <nombre>Premier</nombre>
+    <fechaInicio>2016-10-12</fechaInicio>  
+    <jornada>
+        <partido>
+            <equipoLocal>Arsenal</equipoLocal>
+            <golesLocal>0</golesLocal>
+            <equipoVisitante>Chelsea</equipoVisitante>
+            <golesVisitante>1</golesVisitante>
+        </partido>
+        <partido>
+            <equipoLocal>Manchester United</equipoLocal>
+            <golesLocal>3</golesLocal>
+            <equipoVisitante>New Castle</equipoVisitante>
+            <golesVisitante>1</golesVisitante>
+        </partido>  
+    </jornada>
+    <jornada>
+        <partidos>
+            <partido>
+                <equipoLocal>Arsenal</equipoLocal>
+                <golesLocal>1</golesLocal>
+                <equipoVisitante>Manchester United</equipoVisitante>
+                <golesVisitante>2</golesVisitante>
+            </partido>
+            <partido>
+                <equipoLocal>New Castle</equipoLocal>
+                <golesLocal>1</golesLocal>
+                <equipoVisitante>Chelsea</equipoVisitante>
+                <golesVisitante>1</golesVisitante>
+            </partido>  
+        </partidos>
+    </jornada>
+     
+</liga>

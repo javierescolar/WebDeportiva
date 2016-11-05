@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/index.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/clasificacion.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/partials/tablaJornadas.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/partials/generarXML.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/login.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/partials/tablaClasificacion.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Liga.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/registro.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/jornadas.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/importarLiga.xml</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/menuLigas.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Usuario.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Jornada.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Partido.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/partials/tablaLigas.php</file>
+        </group>
+    </open-files>
+</project-private>
