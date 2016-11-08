@@ -23,6 +23,7 @@
                         <label for="numJugador">Password:</label>
                         <input class="form-control" type="password" name="password" >
                     </div> 
+                     <?php echo isset($mensaje)?$mensaje:'';?>
                     <div class="form-group">
                         <input class="btn btn-primary col-md-offset-10" type="submit" name="registrarse" value="Guardar">
                     </div> 

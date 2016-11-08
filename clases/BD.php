@@ -12,9 +12,16 @@ class BD {
     private function __construct() {
         try {
             self::$bd = new PDO("mysql:host=$this->equipo;dbname=$this->basedatos", $this->usuario, $this->contrasenya);
+            self::$bd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo "Connection Error: " . $e->getMessage();
-            die();
+            switch ($e->getCode()){
+                case 2002:
+                    $error = "Error de conexión a la BD";
+                    break;
+                default :
+                    $error = "Error desconocido";
+            }
+            throw new Exception($error);
         }
     }
 

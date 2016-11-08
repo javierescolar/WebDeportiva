@@ -20,7 +20,7 @@
                         <label for="password">Password:</label>
                         <input class="form-control" type="password" name="password" >
                     </div> 
-                    <?php echo $mensaje; ?>
+                    <?php echo isset($mensaje)?$mensaje:'';?>
                     
                     <div class="form-group">
                         <input class="btn btn-link" type="submit" name="formRegistro" value="Sing on">

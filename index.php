@@ -8,8 +8,14 @@ require_once 'clases/Partido.php';
 require_once 'clases/Usuario.php';
 
 session_start();
+try{
+    $bd = BD::getConexion();
+}  catch (Exception $e){
+    $error = $e;
+    include 'vistas/error.php';
+    die();
+}
 
-$mensaje = "";
 if (isset($_SESSION['usuario'])) {
     if (isset($_SESSION['liga'])) {
         $liga = $_SESSION['liga'];
@@ -58,7 +64,7 @@ if (isset($_SESSION['usuario'])) {
             $fecha = (string)$xml->fechaInicio;
             $jornadas = (Array)$xml->jornada;
             $liga = new Liga($nombreLiga);
-            $liga->importaLiga($fecha, $jornadas);
+            $liga->importaLiga($bd,$fecha, $jornadas);
             $ligas = Liga::muestraLigas();
             include 'vistas/menuLigas.php';
         } else if (isset($_POST['nuevaLiga'])) {
@@ -75,12 +81,12 @@ if (isset($_SESSION['usuario'])) {
             $equipos = $_POST['equipos'];
             //creo el objeto liga para crear la nueva liga
             $liga = new Liga($nombreLiga);
-            $liga->persiste($equipos, $fechaCalendario);
+            $liga->persiste($bd,$equipos, $fechaCalendario);
             //volvemos a la vista para ver las ligas
             $ligas = Liga::muestraLigas();
             include 'vistas/menuLigas.php';
         } else if (isset($_POST['ligaSeleccionada'])) {
-            $liga = Liga::recuperaLigaSeleccionada($_POST['idLigaSeleccionada']);
+            $liga = Liga::recuperaLigaSeleccionada($bd,$_POST['idLigaSeleccionada']);
             $jornada = $liga->getJornadas()->getCurrent();
             $_SESSION['liga'] = $liga;
             include 'vistas/jornadas.php';
@@ -91,7 +97,7 @@ if (isset($_SESSION['usuario'])) {
     }
 } else {
     if (isset($_POST['login'])) {
-        $usuario = Usuario::comprobarUsuarioPorCredenciales($_POST['username'], $_POST['password']);
+        $usuario = Usuario::comprobarUsuarioPorCredenciales($bd,$_POST['username'], $_POST['password']);
         if ($usuario) {
             $_SESSION['usuario'] = $usuario;
             $ligas = Liga::muestraLigas();
@@ -104,8 +110,13 @@ if (isset($_SESSION['usuario'])) {
         include 'vistas/registro.php';
     } else if (isset($_POST['registrarse'])) {
         $usuNew = new Usuario(null, $_POST['username'], $_POST['password']);
-        $mensaje = ($usuNew->persiste()) ? 'usuario registrado' : 'fallo al registrar usuario';
-        include 'vistas/login.php';
+        try {
+            $usuNew->persiste($bd);
+            $mensaje = "Usuario Registrado";
+        } catch (Exception $ex) {
+            $mensaje = $ex->getMessage();
+        }
+        include 'vistas/registro.php';
     } else {
         include 'vistas/login.php';
     }

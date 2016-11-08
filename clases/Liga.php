@@ -74,8 +74,7 @@ Class Liga {
         return $liga;
     }
 
-    function persiste($equipos, $fecha) {
-        $bd = BD::getConexion(); 
+    function persiste($bd,$equipos, $fecha) {
         $select = "INSERT INTO liga(nombre) VALUES ('$this->nombre')";
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
@@ -87,14 +86,13 @@ Class Liga {
             $nuevafecha = strtotime('+7 day', strtotime($fecha));
             $fecha = date('Y-m-j', $nuevafecha);
             foreach ($partidos as $partido => $datos) {
-                $objPartido = new Partido($objJornada->getId(), $datos['local'], $datos['visitante']);
+                $objPartido = new Partido($objJornada->getId(), $datos['local'], $datos['visitante'],0,0);
                 $objPartido->persiste();
             }
         }
     }
 
-    static function recuperaLigaSeleccionada($idLiga) {
-        $bd = BD::getConexion();
+    static function recuperaLigaSeleccionada($bd,$idLiga) {
         $select = "SELECT * FROM liga WHERE id = " . $idLiga;
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
@@ -163,8 +161,7 @@ Class Liga {
         return $clasificacion;
     }
     
-    function importaLiga($fecha,$jornadas) {
-        $bd = BD::getConexion(); 
+    function importaLiga($bd,$fecha,$jornadas) {
         $select = "INSERT INTO liga(nombre) VALUES ('$this->nombre')";
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
