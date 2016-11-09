@@ -8,17 +8,16 @@ require_once 'clases/Jornada.php';
 require_once 'clases/Partido.php';
 require_once 'clases/Usuario.php';
 
-try{
-   Sesion::initSesion();
-   $session = new Sesion();
-}  catch (Exception $e){
-    $error = $e;
+try {
+    $session = new Sesion();
+} catch (Exception $e) {
+    $error = $e->getMessage();
     include 'vistas/error.php';
     die();
 }
-try{
+try {
     $bd = BD::getConexion();
-}  catch (Exception $e){
+} catch (Exception $e) {
     $error = $e;
     include 'vistas/error.php';
     die();
@@ -59,7 +58,7 @@ if ($session->checkSesion('usuario')) {
         } else if (isset($_POST['exportarXML'])) {
             $clasificacion = $liga->muestraClasificacion();
             include 'vistas/partials/generarXML.php';
-        }else if (isset($_POST['verJornadas'])) {
+        } else if (isset($_POST['verJornadas'])) {
             $jornadas = $liga->getJornadas()->getObjects();
             include 'vistas/jornadas.php';
         } else if (isset($_POST['jornadaSeleccionada'])) {
@@ -73,13 +72,13 @@ if ($session->checkSesion('usuario')) {
             include 'vistas/jornadas.php';
         }
     } else {
-        if(isset($_POST['importarXML'])){
+        if (isset($_POST['importarXML'])) {
             $xml = simplexml_load_file('importarLiga.xml');
-            $nombreLiga =(string) $xml->nombre;
-            $fecha = (string)$xml->fechaInicio;
-            $jornadas = (Array)$xml->jornada;
+            $nombreLiga = (string) $xml->nombre;
+            $fecha = (string) $xml->fechaInicio;
+            $jornadas = (Array) $xml->jornada;
             $liga = new Liga($nombreLiga);
-            $liga->importaLiga($bd,$fecha, $jornadas);
+            $liga->importaLiga($bd, $fecha, $jornadas);
             $ligas = Liga::muestraLigas($bd);
             include 'vistas/menuLigas.php';
         } else if (isset($_POST['nuevaLiga'])) {
@@ -94,12 +93,12 @@ if ($session->checkSesion('usuario')) {
             $equipos = $_POST['equipos'];
             //creo el objeto liga para crear la nueva liga
             $liga = new Liga($nombreLiga);
-            $liga->persiste($bd,$equipos, $fechaCalendario);
+            $liga->persiste($bd, $equipos, $fechaCalendario);
             //volvemos a la vista para ver las ligas
             $ligas = Liga::muestraLigas($bd);
             include 'vistas/menuLigas.php';
         } else if (isset($_POST['ligaSeleccionada'])) {
-            $liga = Liga::recuperaLigaSeleccionada($bd,$_POST['idLigaSeleccionada']);
+            $liga = Liga::recuperaLigaSeleccionada($bd, $_POST['idLigaSeleccionada']);
             $jornadas = $liga->getJornadas()->getObjects();
             $session->setSesion('liga', $liga);
             include 'vistas/jornadas.php';
@@ -110,9 +109,9 @@ if ($session->checkSesion('usuario')) {
     }
 } else {
     if (isset($_POST['login'])) {
-        $usuario = Usuario::comprobarUsuarioPorCredenciales($bd,$_POST['username'], $_POST['password']);
+        $usuario = Usuario::comprobarUsuarioPorCredenciales($bd, $_POST['username'], $_POST['password']);
         if ($usuario) {
-            $session->setSesion('usuario',$usuario);
+            $session->setSesion('usuario', $usuario);
             $ligas = Liga::muestraLigas($bd);
             include 'vistas/menuLigas.php';
         } else {
@@ -131,7 +130,7 @@ if ($session->checkSesion('usuario')) {
             $mensaje = $ex->getMessage();
             include 'vistas/registro.php';
             die();
-        }          
+        }
     } else {
         include 'vistas/login.php';
     }

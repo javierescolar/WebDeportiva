@@ -3,13 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/introducirEquipos.php</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/login.php</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/partials/tablaClasificacion.php</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/css/styles.css</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Liga.php</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/vistas/registro.php</file>
-            <file>file:/C:/xampp/htdocs/4WebDeportiva/js/main.js</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/BD.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Sesion.php</file>
+            <file>file:/C:/xampp/htdocs/4WebDeportiva/clases/Usuario.php</file>
         </group>
     </open-files>
 </project-private>

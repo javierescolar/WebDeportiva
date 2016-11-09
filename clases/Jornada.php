@@ -63,8 +63,6 @@ Class Jornada {
                 $jornada->getPartidos()->add($partido);
             }
         }
-
         return $jornadas;
     }
-
 }
