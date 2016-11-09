@@ -6,6 +6,7 @@
         <title>Web deportiva</title>
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     </head>
     <body>
         <div class="container">
@@ -14,19 +15,25 @@
                 <form class="form" action="index.php" method="POST"> 
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input class="form-control" type="text" name="username" >
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username"/>
+                        </div>
                     </div> 
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input class="form-control" type="password" name="password" >
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                            <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"/>
+                        </div>
                     </div> 
-                    <?php echo isset($mensaje)?$mensaje:'';?>
-                    
+                    <?php echo isset($mensaje) ? $mensaje : ''; ?>
+
                     <div class="form-group">
                         <input class="btn btn-link" type="submit" name="formRegistro" value="Sing on">
                         <input class="btn btn-primary" type="submit" name="login" value="Sing In">
                     </div> 
-                    
+
                 </form>
             </div> 
         </div> 

@@ -1,21 +1,16 @@
-
 <table class="table table-bordered">    
     <?php
-    foreach ($jornada->getPartidos()->getObjects() as $partido) {
+   
+    foreach ($jornadas as $key =>$jornada) {
 
         echo "<tr>";
-        echo "<td>" . $partido->getEquipoLocal() . "</td>";
-        echo "<td>";
-        echo "<input class='form-control col-md-1' type='number' name='golesLocal[" . $partido->getId() . "]' value='" . $partido->getGolesLocal() . "'>";
-        echo "</td>";
-        echo "<td>";
-        echo "<input  class='form-control col-md-1' type='number' name='golesVisitante[" . $partido->getId() . "]' value='" . $partido->getGolesVisitante() . "'>";
-        echo "</td>";
-        echo "<td>" . $partido->getEquipoVisitante() . "</td>";
+        echo "<td>Jornada " .($key + 1). "</td>";
+        echo "<td>" . $jornada->getFecha(). "</td>";
+        echo "<td><form action='index.php' method='POST'>"
+              ."<input class='btn btn-primary col-md-10 col-md-offset-1' type='submit' name='jornadaSeleccionada' value='Ver'>"
+              ."<input type='hidden' name='idJornadaSeleccionada' value='$key'>"  
+              ."</form></td>";
         echo "</tr>";
     }
     ?>
 </table>
-
-
-

@@ -35,8 +35,7 @@ Class Liga {
         $this->jornadas = $jornadas;
     }
 
-    static function muestraLigas() {
-        $bd = BD::getConexion();
+    static function muestraLigas($bd) {
         $select = "SELECT * FROM liga";
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
@@ -74,7 +73,7 @@ Class Liga {
         return $liga;
     }
 
-    function persiste($bd,$equipos, $fecha) {
+    function persiste($bd, $equipos, $fecha) {
         $select = "INSERT INTO liga(nombre) VALUES ('$this->nombre')";
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
@@ -82,30 +81,32 @@ Class Liga {
         $calendarioLiga = $this->roundRobin($equipos);
         foreach ($calendarioLiga as $jornada => $partidos) {
             $objJornada = new Jornada($this->id, $fecha);
-            $objJornada->persiste();
+            $objJornada->persiste($bd);
             $nuevafecha = strtotime('+7 day', strtotime($fecha));
             $fecha = date('Y-m-j', $nuevafecha);
             foreach ($partidos as $partido => $datos) {
-                $objPartido = new Partido($objJornada->getId(), $datos['local'], $datos['visitante'],0,0);
-                $objPartido->persiste();
+                if ($datos['local'] != "extra!!" && $datos['visitante'] != "extra!!") {
+                    $objPartido = new Partido($objJornada->getId(), $datos['local'], $datos['visitante'], 0, 0);
+                    $objPartido->persiste($bd);
+                }
             }
         }
     }
 
-    static function recuperaLigaSeleccionada($bd,$idLiga) {
+    static function recuperaLigaSeleccionada($bd, $idLiga) {
         $select = "SELECT * FROM liga WHERE id = " . $idLiga;
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
         $sentencia->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Liga');
         $liga = $sentencia->fetch();
-        foreach (Jornada::obtenJornadas($liga->getId()) as $jornada) {
+        foreach (Jornada::obtenJornadas($bd, $liga->getId()) as $jornada) {
             $liga->getJornadas()->add($jornada);
         }
         return $liga;
     }
 
     function muestraClasificacion() {
-        $datosClasificacion = ['PJ', 'GF', 'GC', 'PTS'];
+        $datosClasificacion = ['PJ', 'PG', 'PE', 'PP', 'GF', 'GC', 'PTS'];
         $equipos = [];
         foreach ($this->getJornadas()->getObjects() as $jornadas) {
             foreach ($jornadas->getPartidos()->getObjects() as $partidos) {
@@ -117,64 +118,73 @@ Class Liga {
         $clasificacion = array_fill_keys($equipos, array_fill_keys($datosClasificacion, 0));
 
         foreach ($clasificacion as $equipo => $datos) {
-            if ($equipo != "extra!!") {
-                foreach ($this->getJornadas()->getObjects() as $jornadas) {
-                    foreach ($jornadas->getPartidos()->getObjects() as $partido) {
+            foreach ($this->getJornadas()->getObjects() as $jornadas) {
+                foreach ($jornadas->getPartidos()->getObjects() as $partido) {
 
-                        if ($partido->getEquipoLocal() == $equipo) {
-                            $clasificacion[$equipo]['PJ'] += 1;
-                            $clasificacion[$equipo]['GF'] += $partido->getGolesLocal();
-                            $clasificacion[$equipo]['GC'] += $partido->getGolesVisitante();
-                            if ($partido->getGolesLocal() == $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 1;
-                            } else if ($partido->getGolesLocal() < $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 0;
-                            } else if ($partido->getGolesLocal() > $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 3;
-                            }
-                        } else if ($partido->getEquipoVisitante() == $equipo) {
-                            $clasificacion[$equipo]['PJ'] += 1;
-                            $clasificacion[$equipo]['GF'] += $partido->getGolesLocal();
-                            $clasificacion[$equipo]['GC'] += $partido->getGolesVisitante();
-                            if ($partido->getGolesLocal() == $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 1;
-                            } else if ($partido->getGolesLocal() > $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 0;
-                            } else if ($partido->getGolesLocal() < $partido->getGolesVisitante()) {
-                                $clasificacion[$equipo]['PTS'] += 3;
-                            }
+                    if ($partido->getEquipoLocal() == $equipo) {
+                        $clasificacion[$equipo]['PJ'] += 1;
+                        $clasificacion[$equipo]['GF'] += $partido->getGolesLocal();
+                        $clasificacion[$equipo]['GC'] += $partido->getGolesVisitante();
+                        if ($partido->getGolesLocal() == $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 1;
+                            $clasificacion[$equipo]['PE'] += 1;
+                        } else if ($partido->getGolesLocal() < $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 0;
+                            $clasificacion[$equipo]['PP'] += 1;
+                        } else if ($partido->getGolesLocal() > $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 3;
+                            $clasificacion[$equipo]['PG'] += 1;
+                        }
+                    } else if ($partido->getEquipoVisitante() == $equipo) {
+                        $clasificacion[$equipo]['PJ'] += 1;
+                        $clasificacion[$equipo]['GF'] += $partido->getGolesVisitante();
+                        $clasificacion[$equipo]['GC'] += $partido->getGolesLocal();
+                        if ($partido->getGolesLocal() == $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 1;
+                            $clasificacion[$equipo]['PE'] += 1;
+                        } else if ($partido->getGolesLocal() > $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 0;
+                            $clasificacion[$equipo]['PP'] += 1;
+                        } else if ($partido->getGolesLocal() < $partido->getGolesVisitante()) {
+                            $clasificacion[$equipo]['PTS'] += 3;
+                            $clasificacion[$equipo]['PG'] += 1;
                         }
                     }
                 }
             }
         }
         foreach ($clasificacion as $equipo => $datos) {
-            if ($equipo != "extra!!") {
-                $clasificacion[$equipo]['GA'] = number_format(($clasificacion[$equipo]['GF'] + $clasificacion[$equipo]['GC']) / $clasificacion[$equipo]['PJ'], 2, '.', ',');
+            if ($clasificacion[$equipo]['GF'] == 0) {
+                $valorGA = 0;
+            } else if ($clasificacion[$equipo]['GC'] == 0) {
+                $valorGA = $clasificacion[$equipo]['GF'];
             } else {
-                $clasificacion[$equipo]['GA'] = 0;
+                $valorGA = $clasificacion[$equipo]['GF'] / $clasificacion[$equipo]['GC'];
             }
+            $clasificacion[$equipo]['GA'] = number_format($valorGA, 2, '.', ',');
         }
         $maxPtos = array_column($clasificacion, 'PTS');
-        $maxGA = array_column($clasificacion, 'GA');
-        array_multisort($maxPtos, SORT_NUMERIC, SORT_DESC, $maxGA, SORT_NUMERIC, SORT_DESC, $clasificacion);
+        $maxPG = array_column($clasificacion, 'PG');
+        $maxPE = array_column($clasificacion, 'PE');
+        array_multisort($maxPtos, SORT_NUMERIC, SORT_DESC, $maxPG, SORT_NUMERIC, SORT_DESC, $maxPE, SORT_NUMERIC, SORT_DESC, $clasificacion);
         return $clasificacion;
     }
-    
-    function importaLiga($bd,$fecha,$jornadas) {
+
+    function importaLiga($bd, $fecha, $jornadas) {
         $select = "INSERT INTO liga(nombre) VALUES ('$this->nombre')";
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
         $this->id = $bd->lastInsertId();
         foreach ($jornadas as $jornada => $partidos) {
             $objJornada = new Jornada($this->id, $fecha);
-            $objJornada->persiste();
+            $objJornada->persiste($bd);
             $nuevafecha = strtotime('+7 day', strtotime($fecha));
             $fecha = date('Y-m-j', $nuevafecha);
             foreach ($partidos as $partido => $datos) {
-                $objPartido = new Partido($objJornada->getId(), (String)$datos->equipoLocal, (String)$datos->equipoVisitante,(int)$datos->golesLocal,(int)$datos->golesVisitante);
-                $objPartido->persiste();
+                $objPartido = new Partido($objJornada->getId(), (String) $datos->equipoLocal, (String) $datos->equipoVisitante, (int) $datos->golesLocal, (int) $datos->golesVisitante);
+                $objPartido->persiste($bd);
             }
         }
     }
+
 }

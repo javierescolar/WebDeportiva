@@ -45,23 +45,21 @@ Class Jornada {
         $this->partidos = $partidos;
     }
 
-    function persiste() {
-        $bd = BD::getConexion();
+    function persiste($bd) {
         $select = "INSERT INTO jornadas(idliga,fecha) VALUES (:idliga, :fecha)";
         $sentencia = $bd->prepare($select);
         $sentencia->execute([":idliga" => $this->idliga, ":fecha" => $this->fecha]);
         $this->id = $bd->lastInsertId();
     }
 
-    static function obtenJornadas($idliga) {
-        $bd = BD::getConexion();
+    static function obtenJornadas($bd,$idliga) {
         $select = "SELECT * FROM jornadas WHERE idliga = " . $idliga;
         $sentencia = $bd->prepare($select);
         $sentencia->execute();
         $sentencia->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Jornada');
         $jornadas = $sentencia->fetchAll();
         foreach ($jornadas as $jornada) {
-            foreach (Partido::obtenPartidos($jornada->getId()) as $partido) {
+            foreach (Partido::obtenPartidos($bd,$jornada->getId()) as $partido) {
                 $jornada->getPartidos()->add($partido);
             }
         }

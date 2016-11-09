@@ -65,8 +65,7 @@ Class Partido {
         $this->golesVisitante = $golesVisitante;
     }
 
-    function persiste() {
-        $bd = BD::getConexion();
+    function persiste($bd) {
         if ($this->id) {
             $select = "UPDATE partidos SET golesLocal = :golesLocal,"
                     . " golesVisitante = :golesVisitante "
@@ -86,8 +85,7 @@ Class Partido {
         return $resul;
     }
     
-    static function obtenPartidos ($idjornada){
-        $bd = BD::getConexion();
+    static function obtenPartidos ($bd,$idjornada){
         $select = "SELECT * FROM partidos WHERE idjornada = ".$idjornada;
         $sentencia = $bd->prepare($select);
         $sentencia->execute();

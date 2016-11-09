@@ -11,7 +11,7 @@
             <div class="col-md-6 col-md-offset-3">
                 <h2 class="text-center">Web Deportiva</h2>
                 <form class="form" action="index.php" method="POST">
-                     <input type="submit" class="col-md-offset-8 btn btn-link" name="verLigas" value="Volver"> 
+                     <input type="submit" class="col-md-offset-10 btn btn-link" name="verLigas" value="Volver"> 
                     <div class="form-group col-md-6">
                         <label for="fechaCalendario">Inicio Calendario</label>
                         <input class="form-control" type="date" name="fechaCalendario">

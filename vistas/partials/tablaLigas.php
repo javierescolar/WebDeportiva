@@ -16,7 +16,7 @@
             echo "<td>" . $liga->getId() . "</td>";
             echo "<td>" . $liga->getNombre() . "</td>";
             echo '<td><form class="form" action="index.php" method="POST">'; 
-            echo "<input class='btn btn-primary' type='submit' name='ligaSeleccionada' value='Ver'>";
+            echo "<input class='btn btn-primary col-md-10 col-md-offset-1' type='submit' name='ligaSeleccionada' value='Ver'>";
             echo "<input type='hidden' name='idLigaSeleccionada' value='". $liga->getId() ."'>";
             echo "</form></td>";
             echo "</tr>";

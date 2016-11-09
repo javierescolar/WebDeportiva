@@ -1,31 +1,46 @@
 <?php
-// FUNCI�N DE CONEXI�N CON LA BASE DE DATOS MYSQL
 
 class Sesion {
 
-    
-    protected static $sesion = null;
-    
-    private function __construct() {
+    //protected static $session = null;
+    /*private function __construct() {
         try {
-            self::$sesion = new Sesion();
+          self::$session = session_start();
         } catch (PDOException $e) {
-            echo "Error Sesion: " . $e->getMessage();
-            die();
+            $error = "Error de sesión";
+            throw new Exception($error);
         }
-    }
+    }*/
 
-    public static function getConexion() {
-        if (!self::$sesion) {
+    public static function initSesion() {
+        /*if (!self::$session) {
             new Sesion();
         }
-        return self::$sesion;
+        return self::$session;*/
+        return session_start();
     }
     
-    function login($sesion){
+    function checkSesion($nombre){
+        return (isset($_SESSION[$nombre]));
+    }
+    
+    function setSesion($nombre,$value){
+        $_SESSION[$nombre] = $value;
         
     }
-
+    
+    function getSesion($nombre){
+        return  $_SESSION[$nombre];
+    }
+    
+    function destroySesion($nombre){
+        unset( $_SESSION[$nombre]);
+    }
+    
+    function destroy(){
+        $_SESSION = [];
+        session_destroy();
+    }
 }
 
 ?>

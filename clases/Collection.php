@@ -311,7 +311,11 @@ class Collection
         return $this->getCurrent();
     }
 
-
+    public function setIterator($num)
+    {
+        $this->iterateNum = $num;
+    } 
+    
     public function resetIterator()
     {
         $this->iterateNum = 0;
@@ -357,5 +361,5 @@ class Collection
     {
         $this->deletedObjects = array();
     }
-
+    
 }
